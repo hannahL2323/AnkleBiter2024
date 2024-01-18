@@ -70,9 +70,9 @@ public class RobotContainer {
     //                                                 () -> driverController.getRawAxis(2), () -> true, false, true);
     TeleopDrive teleopDrive = new TeleopDrive(
         drivebase,
-        () -> MathUtil.applyDeadband(driverController.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
-        () -> MathUtil.applyDeadband(driverController.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
-        () -> driverController.getRightX(), () -> true);
+        () -> MathUtil.applyDeadband(-driverController.getLeftY() * 0.7, OperatorConstants.LEFT_Y_DEADBAND),
+        () -> MathUtil.applyDeadband(-driverController.getLeftX() * 0.7, OperatorConstants.LEFT_X_DEADBAND),
+        () -> -driverController.getRightX() * 0.7, () -> true);
        
     System.out.println(driverController.getLeftY());
     System.out.println(driverController.getLeftX());
