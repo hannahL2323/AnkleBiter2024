@@ -14,7 +14,7 @@
   "wheelGripCoefficientOfFriction": 1.19,
 
   "conversionFactor": {
-    "drive": 0.00001154462,
-    "angle": 0.00410320378
+    "angle": 16.8,
+	  "drive": 0.047286787200699704
   }
 }

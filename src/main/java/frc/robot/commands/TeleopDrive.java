@@ -22,30 +22,30 @@ public class TeleopDrive extends Command {
   private final DoubleSupplier   vY;
   private final DoubleSupplier   omega;
   private final BooleanSupplier  driveMode;
-  private final boolean          isOpenLoop;
+  // private final boolean          isOpenLoop;
   private final SwerveController controller;
-  private final Timer            timer    = new Timer();
-  private final boolean          headingCorrection;
-  private       double           angle    = 0;
-  private       double           lastTime = 0;
+  // private final Timer            timer    = new Timer();
+  // private final boolean          headingCorrection;
+  // private       double           angle    = 0;
+  // private       double           lastTime = 0;
 
 
   /** Creates a new TeleopDrive. */
   public TeleopDrive(SwerveSubsystem swerve, DoubleSupplier vX, DoubleSupplier vY, DoubleSupplier omega,
-                     BooleanSupplier driveMode, boolean isOpenLoop, boolean headingCorrection) {
+  BooleanSupplier driveMode) {
 
     this.swerve = swerve;
     this.vX = vX;
     this.vY = vY;
     this.omega = omega;
     this.driveMode = driveMode;
-    this.isOpenLoop = isOpenLoop;
+    // this.isOpenLoop = isOpenLoop;
     this.controller = swerve.getSwerveController();
-    this.headingCorrection = headingCorrection;
-    if (headingCorrection)
-    {
-      timer.start();
-    }
+    // this.headingCorrection = headingCorrection;
+    // if (headingCorrection)
+    // {
+    //   timer.start();
+    // }
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(swerve);
   }
@@ -53,10 +53,10 @@ public class TeleopDrive extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    if (headingCorrection)
-    {
-      lastTime = timer.get();
-    }
+    // if (headingCorrection)
+    // {
+    //   lastTime = timer.get();
+    // }
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -72,12 +72,15 @@ public class TeleopDrive extends Command {
     // Drive using raw values.
     swerve.drive(new Translation2d(xVelocity * swerve.maximumSpeed, yVelocity * swerve.maximumSpeed),
                  angVelocity * controller.config.maxAngularVelocity,
-                 driveMode.getAsBoolean(), isOpenLoop);
+                 driveMode.getAsBoolean());
+
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+   
+  }
 
   // Returns true when the command should end.
   @Override

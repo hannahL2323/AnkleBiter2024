@@ -54,9 +54,9 @@ public class SwerveSubsystem extends SubsystemBase {
     swerveDrive = new SwerveDrive(driveCfg, controllerCfg, maximumSpeed);
   }
 
-  public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop)
+  public void drive(Translation2d translation, double rotation, boolean fieldRelative)
   {
-    swerveDrive.drive(translation, rotation, fieldRelative, isOpenLoop);
+    swerveDrive.drive(translation, rotation, fieldRelative, false);
   }
 
   public SwerveDriveKinematics getKinematics()
