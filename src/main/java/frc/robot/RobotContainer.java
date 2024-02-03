@@ -9,9 +9,12 @@ import frc.robot.Constants.OperatorConstants;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-// import frc.robot.subsystems.CameraSubsystem;
+import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.io.File;
+
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import frc.robot.commands.AbsoluteDrive;
 import frc.robot.commands.AbsoluteFieldDrive;
 import frc.robot.commands.TeleopDrive;
@@ -35,7 +38,7 @@ import edu.wpi.first.wpilibj2.command.RepeatCommand;
  */
 public class RobotContainer {
 
-  // public static CameraSubsystem cameraSubsystem = new CameraSubsystem();
+  public static CameraSubsystem cameraSubsystem = new CameraSubsystem();
   
   private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                          "swerve"));
@@ -103,7 +106,7 @@ public class RobotContainer {
 
     drivebase.setDefaultCommand(xBoxTeleopDrive);
     // drivebase.setDefaultCommand(joystickTeleopDrive);
-    
+
   }
 
   
@@ -113,15 +116,19 @@ public class RobotContainer {
   {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
-    // driverLeftBumper.whileTrue(new TeleopDrive(
-    //     drivebase,
-    //     () -> cameraSubsystem.getDriveSpeed() * 0.5,
-    //     () -> cameraSubsystem.getTurnSpeed() * 0.5,
-    //     () -> 0, () -> true));
+    driverLeftBumper.whileTrue(new TeleopDrive(
+        drivebase,
+        () -> cameraSubsystem.getDriveSpeed() * 0.5,
+        () -> cameraSubsystem.getTurnSpeed() * 0.5,
+        () -> 0, () -> true));
 
     driverA.onTrue((new InstantCommand(drivebase::zeroGyro)));
     // new JoystickButton(driverController, 3).onTrue(new InstantCommand(drivebase::addFakeVisionReading));
     driverX.whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
   }
+
+  // public Command getAutonomousCommand() {
+  //   return new PathPlannerAuto("Example Auto");
+  // }
 
 }

@@ -72,7 +72,7 @@ public class TeleopDrive extends Command {
     // Drive using raw values.
     swerve.drive(new Translation2d(xVelocity * swerve.maximumSpeed, yVelocity * swerve.maximumSpeed),
                  angVelocity * controller.config.maxAngularVelocity,
-                 driveMode.getAsBoolean());
+                 driveMode.getAsBoolean()); // FIXME: change fieldRelative to true?
 
   }
 
