@@ -9,7 +9,8 @@ import frc.robot.Constants.OperatorConstants;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.subsystems.CameraSubsystem;
+// import frc.robot.subsystems.CameraSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
 import java.io.File;
 
@@ -38,7 +39,8 @@ import edu.wpi.first.wpilibj2.command.RepeatCommand;
  */
 public class RobotContainer {
 
-  public static CameraSubsystem cameraSubsystem = new CameraSubsystem();
+  // public static CameraSubsystem cameraSubsystem = new CameraSubsystem();
+  public static LimelightSubsystem limelightSubsystem = new LimelightSubsystem();
   
   private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                          "swerve"));
@@ -118,9 +120,15 @@ public class RobotContainer {
 
     driverLeftBumper.whileTrue(new TeleopDrive(
         drivebase,
-        () -> cameraSubsystem.getDriveSpeed() * 0.5,
-        () -> cameraSubsystem.getTurnSpeed() * 0.5,
-        () -> 0, () -> true));
+        () -> limelightSubsystem.getDrive(),
+        () -> limelightSubsystem.getDrive(),
+        () -> limelightSubsystem.getSteer(), () -> true));
+
+    // driverLeftBumper.whileTrue(new TeleopDrive(
+    //     drivebase,
+    //     () -> cameraSubsystem.getDriveSpeed() * 0.5,
+    //     () -> cameraSubsystem.getTurnSpeed() * 0.5,
+    //     () -> 0, () -> true));
 
     driverA.onTrue((new InstantCommand(drivebase::zeroGyro)));
     // new JoystickButton(driverController, 3).onTrue(new InstantCommand(drivebase::addFakeVisionReading));
