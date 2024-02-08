@@ -22,12 +22,8 @@ public class TeleopDrive extends Command {
   private final DoubleSupplier   vY;
   private final DoubleSupplier   omega;
   private final BooleanSupplier  driveMode;
-  // private final boolean          isOpenLoop;
   private final SwerveController controller;
-  // private final Timer            timer    = new Timer();
-  // private final boolean          headingCorrection;
-  // private       double           angle    = 0;
-  // private       double           lastTime = 0;
+  
 
 
   /** Creates a new TeleopDrive. */
@@ -39,14 +35,8 @@ public class TeleopDrive extends Command {
     this.vY = vY;
     this.omega = omega;
     this.driveMode = driveMode;
-    // this.isOpenLoop = isOpenLoop;
     this.controller = swerve.getSwerveController();
-    // this.headingCorrection = headingCorrection;
-    // if (headingCorrection)
-    // {
-    //   timer.start();
-    // }
-    // Use addRequirements() here to declare subsystem dependencies.
+    
     addRequirements(swerve);
   }
 

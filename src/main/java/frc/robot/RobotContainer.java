@@ -18,6 +18,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import frc.robot.commands.AbsoluteDrive;
 import frc.robot.commands.AbsoluteFieldDrive;
+import frc.robot.commands.DriveToTag;
 import frc.robot.commands.TeleopDrive;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Filesystem;
@@ -42,7 +43,7 @@ public class RobotContainer {
   // public static CameraSubsystem cameraSubsystem = new CameraSubsystem();
   public static LimelightSubsystem limelightSubsystem = new LimelightSubsystem();
   
-  private final SwerveSubsystem drivebase = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
+  public static SwerveSubsystem swerveSubsystem = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                          "swerve"));
   // driver xbox
   XboxController driverController = new XboxController(0);
@@ -95,18 +96,18 @@ public class RobotContainer {
     //                                                                              OperatorConstants.LEFT_X_DEADBAND),
     //                                                 () -> driverController.getRawAxis(2), () -> true, false, true);
     TeleopDrive xBoxTeleopDrive = new TeleopDrive(
-      drivebase,
+      swerveSubsystem,
       () -> MathUtil.applyDeadband(-driverController.getLeftY() * 0.7, OperatorConstants.LEFT_Y_DEADBAND),
       () -> MathUtil.applyDeadband(-driverController.getLeftX() * 0.7, OperatorConstants.LEFT_X_DEADBAND),
       () -> -driverController.getRightX() * 0.7, () -> true);
     
     TeleopDrive joystickTeleopDrive = new TeleopDrive(
-      drivebase, 
+      swerveSubsystem, 
       () -> MathUtil.applyDeadband(-driverJoystick.getY() * 0.7, OperatorConstants.LEFT_Y_DEADBAND),
       () -> MathUtil.applyDeadband(-driverJoystick.getX() * 0.7, OperatorConstants.LEFT_X_DEADBAND),
       () -> MathUtil.applyDeadband(-driverJoystick.getTwist() * 0.7, OperatorConstants.ROTATION_DEADBAND), () -> true);
 
-    drivebase.setDefaultCommand(xBoxTeleopDrive);
+    swerveSubsystem.setDefaultCommand(xBoxTeleopDrive);
     // drivebase.setDefaultCommand(joystickTeleopDrive);
 
   }
@@ -118,11 +119,13 @@ public class RobotContainer {
   {
     // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
 
+    // driverLeftBumper.whileTrue(new DriveToTag(swerveSubsystem));
+
     driverLeftBumper.whileTrue(new TeleopDrive(
-        drivebase,
-        () -> limelightSubsystem.getDrive(),
-        () -> limelightSubsystem.getDrive(),
-        () -> limelightSubsystem.getSteer(), () -> true));
+        swerveSubsystem,
+        () -> limelightSubsystem.getDrive() * 0.3,
+        () -> limelightSubsystem.getDrive() * 0.3,
+        () -> -limelightSubsystem.getSteer() * 0.1, () -> true));
 
     // driverLeftBumper.whileTrue(new TeleopDrive(
     //     drivebase,
@@ -130,9 +133,9 @@ public class RobotContainer {
     //     () -> cameraSubsystem.getTurnSpeed() * 0.5,
     //     () -> 0, () -> true));
 
-    driverA.onTrue((new InstantCommand(drivebase::zeroGyro)));
+    driverA.onTrue((new InstantCommand(swerveSubsystem::zeroGyro)));
     // new JoystickButton(driverController, 3).onTrue(new InstantCommand(drivebase::addFakeVisionReading));
-    driverX.whileTrue(new RepeatCommand(new InstantCommand(drivebase::lock, drivebase)));
+    driverX.whileTrue(new RepeatCommand(new InstantCommand(swerveSubsystem::lock, swerveSubsystem)));
   }
 
   // public Command getAutonomousCommand() {

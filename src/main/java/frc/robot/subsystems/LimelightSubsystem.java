@@ -52,32 +52,42 @@ public class LimelightSubsystem extends SubsystemBase {
     // double y = ty.getDouble(0.0);
     // double area = ta.getDouble(0.0);
 
-    //post to smart dashboard periodically
-    SmartDashboard.putNumber("LimelightX", x);
-    SmartDashboard.putNumber("LimelightY", y);
-    SmartDashboard.putNumber("LimelightArea", area);
+    // //post to smart dashboard periodically
+    // SmartDashboard.putNumber("LimelightX", x);
+    // SmartDashboard.putNumber("LimelightY", y);
+    // SmartDashboard.putNumber("LimelightArea", area);
 
     
   }
 
   public double getSteer() {
-    double tx = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
-
-    final double STEER_K = 0.03;
-    // Start with proportional steering
-    double steer = tx * STEER_K;
-    return steer;
+    double x = tx.getDouble(0.0);
+    return x;
   }
 
   public double getDrive() {
-    double ta = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0);
-    final double DRIVE_K = 0.26;
-
-    // try to drive forward until the target area reaches our desired area
-    double drive = (DESIRED_TARGET - ta) * DRIVE_K;
-
-    return drive;
+    double y = ty.getDouble(0.0);
+    return y;
   }
+
+  // public double getSteer() {
+  //   double tx = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
+
+  //   final double STEER_K = 0.03;
+  //   // Start with proportional steering
+  //   double steer = tx * STEER_K;
+  //   return steer;
+  // }
+
+  // public double getDrive() {
+  //   double ta = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0);
+  //   final double DRIVE_K = 0.26;
+
+  //   // try to drive forward until the target area reaches our desired area
+  //   double drive = (DESIRED_TARGET - ta) * DRIVE_K;
+
+  //   return drive;
+  // }
 
   
 
