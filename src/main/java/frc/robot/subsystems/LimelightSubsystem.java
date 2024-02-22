@@ -60,14 +60,14 @@ public class LimelightSubsystem extends SubsystemBase {
     
   }
 
-  public double getSteer() {
+  public double getTx() {
     double x = tx.getDouble(0.0);
     return x;
   }
 
-  public double getDrive() {
-    double y = ty.getDouble(0.0);
-    return y;
+  public double getTa() {
+    double a = ta.getDouble(0.0);
+    return a;
   }
 
   // public double getSteer() {

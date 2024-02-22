@@ -20,11 +20,11 @@ import swervelib.SwerveController;
 
 public class DriveToTag extends Command {
 
-  private final SwerveSubsystem  swerve;
-  // private final DoubleSupplier   vX;
-  // private final DoubleSupplier   vY;
-  // private final DoubleSupplier   omega;
-  // private final BooleanSupplier  driveMode;
+  // private final SwerveSubsystem  swerve;
+  // // private final DoubleSupplier   vX;
+  // // private final DoubleSupplier   vY;
+  // // private final DoubleSupplier   omega;
+  // // private final BooleanSupplier  driveMode;
 
   // NetworkTable for the Limelight camera (contains list of NetworkTableEntries, which are bits of a continuous data stream)
   NetworkTable table;
@@ -50,13 +50,6 @@ public class DriveToTag extends Command {
   /** Creates a new DriveToTag. */
   public DriveToTag(SwerveSubsystem swerve) {
     // Use addRequirements() here to declare subsystem dependencies.
-
-    this.swerve = swerve;
-    // this.vX = vX;
-    // this.vY = vY;
-    // this.omega = omega;
-    // this.driveMode = driveMode;
-    this.controller = swerve.getSwerveController();
     
     addRequirements(RobotContainer.limelightSubsystem, swerve);
 
@@ -92,10 +85,7 @@ public class DriveToTag extends Command {
     double yVelocity   = Math.pow(y, 3);
     double angVelocity = Math.pow(x, 3);
 
-    // Drive using raw values.
-    swerve.drive(new Translation2d(yVelocity * 0.2, yVelocity * 0.2),
-                 angVelocity * 0.02,
-                 true);
+    
 
   }
 
