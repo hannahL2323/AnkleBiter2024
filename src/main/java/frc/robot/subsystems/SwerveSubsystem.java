@@ -16,6 +16,7 @@ import swervelib.telemetry.SwerveDriveTelemetry;
 import swervelib.telemetry.SwerveDriveTelemetry.TelemetryVerbosity;
 import swervelib.SwerveController;
 import swervelib.motors.SwerveMotor;
+import swervelib.SwerveModule;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -60,6 +61,12 @@ public class SwerveSubsystem extends SubsystemBase {
       throw new RuntimeException(e);
     }
     swerveDrive.setHeadingCorrection(false); // Heading correction should only be used while controlling the robot via angle.
+
+    for(SwerveModule module : swerveDrive.getModules())
+      module.setAntiJitter(false);
+
+    swerveDrive.setCosineCompensator(false);
+
 
     // // Configure AutoBuilder last
     // AutoBuilder.configureHolonomic(
