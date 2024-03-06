@@ -44,7 +44,7 @@ public class LimelightSubsystem extends SubsystemBase {
 
     // desiredDistance = 3;
 
-    DESIRED_TARGET = 13;
+    DESIRED_TARGET = 4;
 
 
     // //read values periodically
@@ -65,19 +65,29 @@ public class LimelightSubsystem extends SubsystemBase {
     return x;
   }
 
-  public double getTa() {
-    double a = ta.getDouble(0.0);
-    return a;
+  // public double getTa() {
+  //   double a = ta.getDouble(0.0);
+  //   return a;
+  // }
+
+  public boolean targetAreaReached() {
+    double area = ta.getDouble(0.0);
+    if (area >= DESIRED_TARGET) {
+      return true;
+    }
+    return false;
   }
 
-  // public double getSteer() {
-  //   double tx = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
+  public double getSteer() {
+    double tx = NetworkTableInstance.getDefault().getTable("limelight").getEntry("tx").getDouble(0);
 
-  //   final double STEER_K = 0.03;
-  //   // Start with proportional steering
-  //   double steer = tx * STEER_K;
-  //   return steer;
-  // }
+    final double STEER_K = 0.06;
+    // Start with proportional steering
+    double steer = tx * STEER_K;
+    return steer;
+  }
+
+
 
   // public double getDrive() {
   //   double ta = NetworkTableInstance.getDefault().getTable("limelight").getEntry("ta").getDouble(0);
@@ -164,6 +174,8 @@ public class LimelightSubsystem extends SubsystemBase {
     x = tx.getDouble(0.0);
     y = ty.getDouble(0.0);
     area = ta.getDouble(0.0);
+    SmartDashboard.putNumber("area", area);
+
   }
 
 }

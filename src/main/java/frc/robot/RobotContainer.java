@@ -9,6 +9,7 @@ import frc.robot.Constants.OperatorConstants;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.subsystems.LEDSubsystem;
 // import frc.robot.subsystems.CameraSubsystem;
 import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.SwerveSubsystem;
@@ -18,6 +19,8 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 
 import frc.robot.commands.AbsoluteDrive;
 import frc.robot.commands.AbsoluteFieldDrive;
+import frc.robot.commands.FakeShoot;
+import frc.robot.commands.RainbowCommand;
 // import frc.robot.commands.DriveToTag;
 import frc.robot.commands.TeleopDrive;
 import edu.wpi.first.math.MathUtil;
@@ -42,6 +45,7 @@ public class RobotContainer {
 
   // public static CameraSubsystem cameraSubsystem = new CameraSubsystem();
   public static LimelightSubsystem limelightSubsystem = new LimelightSubsystem();
+  public static LEDSubsystem ledSubsystem = new LEDSubsystem();
   
   public static SwerveSubsystem swerveSubsystem = new SwerveSubsystem(new File(Filesystem.getDeployDirectory(),
                                                                          "swerve"));
@@ -95,6 +99,7 @@ public class RobotContainer {
     //                                                 () -> MathUtil.applyDeadband(driverController.getLeftX(),
     //                                                                              OperatorConstants.LEFT_X_DEADBAND),
     //                                                 () -> driverController.getRawAxis(2), () -> true, false, true);
+    
     TeleopDrive xBoxTeleopDrive = new TeleopDrive(
       swerveSubsystem,
       () -> MathUtil.applyDeadband(driverController.getLeftY() * 0.7, OperatorConstants.LEFT_Y_DEADBAND),
@@ -121,21 +126,25 @@ public class RobotContainer {
 
     // driverLeftBumper.whileTrue(new DriveToTag(swerveSubsystem));
 
-    // driverLeftBumper.whileTrue(new TeleopDrive(
-    //     swerveSubsystem,
-    //     () -> limelightSubsystem.getDrive() * 0.3,
-    //     () -> limelightSubsystem.getDrive() * 0.3,
-    //     () -> -limelightSubsystem.getSteer() * 0.1, () -> true));
+    driverLeftBumper.whileTrue(new TeleopDrive(
+        swerveSubsystem,
+        () -> MathUtil.applyDeadband(driverController.getLeftY() * 0.7, OperatorConstants.LEFT_Y_DEADBAND),
+        () -> MathUtil.applyDeadband(driverController.getLeftX() * 0.7, OperatorConstants.LEFT_X_DEADBAND),
+        () -> limelightSubsystem.getSteer(), () -> true));
+
+    driverRightBumper.whileTrue(new FakeShoot());
+    driverX.whileTrue(new RainbowCommand());
+
 
     // driverLeftBumper.whileTrue(new TeleopDrive(
-    //     drivebase,
+    //     swerveSubsystem,
     //     () -> cameraSubsystem.getDriveSpeed() * 0.5,
     //     () -> cameraSubsystem.getTurnSpeed() * 0.5,
     //     () -> 0, () -> true));
 
-    driverA.onTrue((new InstantCommand(swerveSubsystem::zeroGyro)));
+    // driverA.onTrue((new InstantCommand(swerveSubsystem::zeroGyro)));
     // new JoystickButton(driverController, 3).onTrue(new InstantCommand(drivebase::addFakeVisionReading));
-    driverX.whileTrue(new RepeatCommand(new InstantCommand(swerveSubsystem::lock, swerveSubsystem)));
+    // driverX.whileTrue(new RepeatCommand(new InstantCommand(swerveSubsystem::lock, swerveSubsystem)));
   }
 
   // public Command getAutonomousCommand() {
