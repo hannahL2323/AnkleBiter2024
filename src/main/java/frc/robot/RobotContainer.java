@@ -7,6 +7,7 @@ package frc.robot;
 import frc.robot.Constants.OperatorConstants;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.subsystems.LEDSubsystem;
@@ -17,16 +18,20 @@ import java.io.File;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
 
+
 import frc.robot.commands.AbsoluteDrive;
 import frc.robot.commands.AbsoluteFieldDrive;
 import frc.robot.commands.FakeShoot;
 import frc.robot.commands.RainbowCommand;
 // import frc.robot.commands.DriveToTag;
 import frc.robot.commands.TeleopDrive;
+import frc.robot.commands.TimedTeleopDrive;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.commands.TeleopDrive;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
@@ -68,12 +73,22 @@ public class RobotContainer {
   JoystickButton joystickX = new JoystickButton(driverJoystick, 5);
   JoystickButton joystickY = new JoystickButton(driverJoystick, 6);
 
+  private final SendableChooser<String> autoChooser = new SendableChooser<>();
+  private static final String DO_NOTHING = "Do Nothing";
+  private static final String PATH = "Path";
+  private static final String SWIPE = "Swipe";
 
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
     configureBindings();
+
+    autoChooser.setDefaultOption(DO_NOTHING, DO_NOTHING);
+    autoChooser.addOption(PATH, PATH);
+    autoChooser.addOption(SWIPE, SWIPE);
+
+    SmartDashboard.putData("AutoPattern", autoChooser);
 
     
     // AbsoluteDrive closedAbsoluteDrive = new AbsoluteDrive(drivebase,
@@ -102,9 +117,10 @@ public class RobotContainer {
     
     TeleopDrive xBoxTeleopDrive = new TeleopDrive(
       swerveSubsystem,
-      () -> MathUtil.applyDeadband(driverController.getLeftY() * 0.7, OperatorConstants.LEFT_Y_DEADBAND),
-      () -> MathUtil.applyDeadband(driverController.getLeftX() * 0.7, OperatorConstants.LEFT_X_DEADBAND),
-      () -> -driverController.getRightX() * 0.7, () -> true);
+      () -> MathUtil.applyDeadband(driverController.getLeftY(), OperatorConstants.LEFT_Y_DEADBAND),
+      () -> MathUtil.applyDeadband(driverController.getLeftX(), OperatorConstants.LEFT_X_DEADBAND),
+      () -> MathUtil.applyDeadband(-driverController.getRightX(), OperatorConstants.ROTATION_DEADBAND),
+      () -> true);
     
     // TeleopDrive joystickTeleopDrive = new TeleopDrive(
     //   swerveSubsystem, 
@@ -133,8 +149,7 @@ public class RobotContainer {
         () -> limelightSubsystem.getSteer(), () -> true));
 
     driverRightBumper.whileTrue(new FakeShoot());
-    driverX.whileTrue(new RainbowCommand());
-
+    driverX.onTrue(Commands.runOnce(swerveSubsystem::zeroGyro));
 
     // driverLeftBumper.whileTrue(new TeleopDrive(
     //     swerveSubsystem,
@@ -150,5 +165,26 @@ public class RobotContainer {
   // public Command getAutonomousCommand() {
   //   return new PathPlannerAuto("Example Auto");
   // }
+
+  public Command getAutoCommand() {
+
+        // At the beginning of auto, get the selected pattern and schedule the auto
+        String selectedAuto = autoChooser.getSelected();
+                
+        switch (selectedAuto) {
+        
+        case DO_NOTHING:
+            return new InstantCommand();
+            
+        case PATH:
+            return new PathPlannerAuto("test");
+
+        case SWIPE:
+            return new PathPlannerAuto("Swipe");
+            
+        default:
+            return new InstantCommand();
+        }
+    }
 
 }

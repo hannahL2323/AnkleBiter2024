@@ -11,7 +11,7 @@
   },
   
   "inverted": {
-    "drive": false,
+    "drive": true,
     "angle": true
   },
   "angle": {

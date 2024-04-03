@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import com.pathplanner.lib.util.PIDConstants;
+
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.math.util.Units;
 import swervelib.math.Matter;
@@ -20,13 +22,13 @@ public class Constants {
     {
 
         // Joystick Deadband
-        public static final double LEFT_X_DEADBAND = 0.01;
-        public static final double LEFT_Y_DEADBAND = 0.01;
-        public static final double ROTATION_DEADBAND = 0.1;
+        public static final double LEFT_X_DEADBAND = 0.1;
+        public static final double LEFT_Y_DEADBAND = 0.1;
+        public static final double ROTATION_DEADBAND = 0.3;
     }
 
     public static class LEDConstants {
-        public static final int LED_PORT = 9;
+        public static final int LED_PORT = 3;
 
         public static final int WHITE = 0xFFFFFF;
         public static final int RED = 0xFF0000;
@@ -34,5 +36,11 @@ public class Constants {
         public static final int GREEN = 0x00FF00;
         public static final int PURPLE = 0x800080;
         public static final int BLUE = 0x0000FF;
+    }
+
+    public static final class AutonConstants {
+
+        public static final PIDConstants TRANSLATION_PID = new PIDConstants(0.7, 0, 0);
+        public static final PIDConstants ANGLE_PID   = new PIDConstants(0.4, 0, 0.01);
     }
 }
